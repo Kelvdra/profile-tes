@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= (config.journey && config.journey.title) ? config.journey.title : 'Journey' %> - <%= config.profile.name %></title>
+  <meta name="description" content="<%= (config.journey && config.journey.subtitle) ? config.journey.subtitle : config.seo.description %>">
+  <meta name="keywords" content="<%= config.seo.keywords %>">
+  <meta property="og:title" content="<%= (config.journey && config.journey.title) ? config.journey.title : 'Journey' %> - <%= config.profile.name %>" />
+  <meta property="og:description" content="<%= (config.journey && config.journey.subtitle) ? config.journey.subtitle : config.seo.description %>" />
+  <meta property="og:image" content="<%= config.seo.ogImage %>" />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Particles background akan di-inject oleh JavaScript -->
+
+  <div class="container">
+    <div class="journey-topbar">
+      <a class="journey-back" href="./index.html" aria-label="Back">
+        <i class="fas fa-arrow-left"></i>
+        <span>Kembali</span>
+      </a>
+      <div class="journey-title-wrap">
+        <h1 class="journey-title"><%= (config.journey && config.journey.title) ? config.journey.title : 'Journey' %></h1>
+        <p class="journey-subtitle"><%= (config.journey && config.journey.subtitle) ? config.journey.subtitle : '' %></p>
+      </div>
+    </div>
+
+    <div class="journey-timeline">
+      <% if (config.journey && Array.isArray(config.journey.items) && config.journey.items.length) { %>
+        <% config.journey.items.forEach(group => { %>
+          <div class="journey-year">
+            <div class="journey-year-badge">
+              <i class="fas fa-calendar"></i>
+              <span><%= group.year %></span>
+            </div>
+
+            <div class="journey-cards">
+              <% (group.trips || []).forEach(trip => { %>
+                <div class="journey-card">
+                  <div class="journey-card-header">
+                    <div class="journey-card-title">
+                      <i class="fas fa-location-dot"></i>
+                      <span><%= trip.title %></span>
+                    </div>
+                    <div class="journey-card-meta">
+                      <% if (trip.location) { %>
+                        <span class="journey-chip"><i class="fas fa-map"></i> <%= trip.location %></span>
+                      <% } %>
+                      <% if (trip.date) { %>
+                        <span class="journey-chip"><i class="fas fa-clock"></i> <%= trip.date %></span>
+                      <% } %>
+                    </div>
+                  </div>
+
+                  <% if (trip.description) { %>
+                    <p class="journey-desc"><%= trip.description %></p>
+                  <% } %>
+
+                  <% if (Array.isArray(trip.highlights) && trip.highlights.length) { %>
+                    <ul class="journey-highlights">
+                      <% trip.highlights.forEach(h => { %>
+                        <li><%= h %></li>
+                      <% }); %>
+                    </ul>
+                  <% } %>
+
+                  <% if (trip.link) { %>
+                    <a class="journey-link" href="<%= trip.link %>" target="_blank" rel="noreferrer">
+                      Lihat detail
+                      <i class="fas fa-arrow-up-right-from-square"></i>
+                    </a>
+                  <% } %>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="journey-empty">
+          <i class="fas fa-route"></i>
+          <p>Belum ada data perjalanan. Silakan isi di <code>src/config/data.js</code> pada bagian <code>journey</code>.</p>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="footer">
+      <a href="<%= config.footer.link %>"><%= config.footer.text %></a>
+    </div>
+  </div>
+</body>
+</html>
